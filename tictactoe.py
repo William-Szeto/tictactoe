@@ -1,6 +1,3 @@
-'''
-[['x','x','o','o','x','o','x','o','x']]
-'''
 import random
 def checkWin(board):
     for a in range(3):
