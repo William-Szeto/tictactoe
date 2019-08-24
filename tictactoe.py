@@ -22,26 +22,26 @@ def condenseList(toCondense):
     for thing in toCondense:
         output+=str(thing)
     return output
-def playAIGame(list1,list2):
-    print "Starting game between AI#%s and AI#%s"%(condenseList(list1),condenseList(list2))
+def playAIGame(list1,list2,showtext=True):
+    if showtext: print "Starting game between AI#%s and AI#%s"%(condenseList(list1),condenseList(list2))
     board=[' ']*9
     for i in range(5):
         for x in list1:
             if board[x] not in ['x','o']:
                 board[x]='x'
                 break
-        displayBoard(board)
+        if showtext: displayBoard(board)
         if checkWin(board)=='x':
-            print "AI#%s wins!"%(condenseList(list1))
+            if showtext: print "AI#%s wins!"%(condenseList(list1))
             return 'x'
         for o in list2:
             if board[o] not in ['x','o']:
                 board[o]='o'
                 break
-        displayBoard(board)
+        if showtext: displayBoard(board)
         cWin=checkWin(board)
         if checkWin(board)=='o':
-            print "AI#%s wins!"%(condenseList(list2))
+            if showtext: print "AI#%s wins!"%(condenseList(list2))
             return 'o'
     return 'e'
 def simGames(length):
@@ -87,3 +87,26 @@ def simGames(length):
                     king[i]=challenger[i]
         print "The king has won %i games as king and drawn %i"%(winsdraws[0],winsdraws[1])
         a+=1
+def testStrategy(strategy,games,letter,showtext=True):
+    a=1
+    wdl=[0,0,0]
+    condensedStrategy=condenseList(strategy)
+    while a<=games:
+        if showtext:
+            print "Game %i"%a
+        elif a%100==0:
+            print "Game %i"%a
+        challenger=random.sample([0,1,2,3,4,5,6,7,8],9)
+        if letter=='x':
+            result=playAIGame(strategy,challenger,False)
+        elif letter=='o':
+            result=playAIGame(challenger,strategy,False)
+        if result==letter:
+            wdl[0]+=1
+        elif result=='e':
+            wdl[1]+=1
+        else:
+            wdl[2]+=1
+        if showtext: print "Strategy %s has won %i times, drawn %i times, and lost %i times!"%(condensedStrategy,wdl[0],wdl[1],wdl[2])
+        a+=1
+    if not showtext: print "Strategy %s has won %i times, drawn %i times, and lost %i times!"%(condensedStrategy,wdl[0],wdl[1],wdl[2])
