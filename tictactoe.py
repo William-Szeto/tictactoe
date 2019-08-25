@@ -87,14 +87,13 @@ def simGames(length):
                     king[i]=challenger[i]
         print "The king has won %i games as king and drawn %i"%(winsdraws[0],winsdraws[1])
         a+=1
-def testStrategy(strategy,games,letter,showtext=True):
+def testStrategy(strategy,games,letter,showtext=True,returnwdl=False):
     a=1
     wdl=[0,0,0]
     condensedStrategy=condenseList(strategy)
+    print "Testing strategy %s"%condensedStrategy
     while a<=games:
         if showtext:
-            print "Game %i"%a
-        elif a%100==0:
             print "Game %i"%a
         challenger=random.sample([0,1,2,3,4,5,6,7,8],9)
         if letter=='x':
@@ -109,4 +108,35 @@ def testStrategy(strategy,games,letter,showtext=True):
             wdl[2]+=1
         if showtext: print "Strategy %s has won %i times, drawn %i times, and lost %i times!"%(condensedStrategy,wdl[0],wdl[1],wdl[2])
         a+=1
-    if not showtext: print "Strategy %s has won %i times, drawn %i times, and lost %i times!"%(condensedStrategy,wdl[0],wdl[1],wdl[2])
+    #if not showtext: print "Strategy %s has won %i times, drawn %i times, and lost %i times!"%(condensedStrategy,wdl[0],wdl[1],wdl[2])
+    if returnwdl: return [condensedStrategy]+wdl
+def testRandomStrategies(strategies):
+    b=1
+    results=[]
+    while b<=strategies:
+        strategy=random.sample([0,1,2,3,4,5,6,7,8],9)
+        results.append(testStrategy(strategy,10000,'x',False,True))
+        b+=1
+    #file=open("results.txt","a")
+    print "Strategy\tWins\tDraws\tLosses"
+    for result in results:
+        toprint=''
+        for thing in result:
+            toprint+=str(thing)
+            toprint+='\t'
+        #toprint+='\n'
+        print toprint
+        #file.write(toprint)
+    #file.close()
+def trs(strategies):
+    testRandomStrategies(strategies)
+def testInfiniteStrategies():
+    b=0
+    while True:
+        #print b
+        trs(100)
+        b+=1
+        a=''
+        a=raw_input("Press enter to continue: ")
+def tis():
+    testInfiniteStrategies()
